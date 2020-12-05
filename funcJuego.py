@@ -16,9 +16,11 @@ def resultados(puntaje, tiempo, estado):
     return nombre
 
 def palabraSeleccionada():
-    palabras=["Hola como estas","Estudio en UTEC","Impostor","UTECsino","Ay Caramba","Aquel arbolito","CS ROCKS","I like turtles","P1 esta facil","Mi iPhone es marca Samsung","Hoy saco veinte","Vaticano","Hereje","Salchipapa","Pollo a la brasa","Pan con queso","Palta brother","Ciento ocho","Todo es increible","Ironman","Chavo del ocho"]
+    entradas=open("entradas.txt", "r")
+    palabras=[i[:len(i)-1] for i in entradas]
+    print(palabras)
+    entradas.close()
     seleccion=palabras[random.randint(0,len(palabras)-1)]
-    seleccion=palabras[0]#########
     seleccionLista=[]
     for i in seleccion:
         if i==' ':
