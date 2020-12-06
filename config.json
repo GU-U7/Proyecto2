@@ -1,0 +1,50 @@
+{
+    "funcMain":{
+        "menuPrincipal":[
+            "Jugar",
+            "Configuracion",
+            "Highscores",
+            "Salir"
+        ],
+        "menuJugar":[
+            "Un jugador",
+            "Dos jugadores",
+            "Regresar",
+            "Salir"
+        ],
+        "menuConfiguracion":[
+            "Configurar intentos",
+            "Regresar",
+            "Salir"
+        ],
+        "opcion":[
+            "Ingresar opcion: ",
+            "Opcion incorrecta, intente de nuevo: "
+        ],
+        "miscelaneo":[
+            "En construccion", 
+            "Regresar"
+        ]
+    },
+    "funcJuego":{
+        "resultados":{
+            "estado":[
+                "Acerto la frase",
+                "Ha perdido"
+            ],
+            "puntaje":"Puntaje obtenido:",
+            "tiempo":"Tiempo tardado:",
+            "nombre":[
+                "Introduce tu nombre: ", 
+                "Ingresa un nombre mas largo: "
+            ]
+        },
+        "palabraSeleccionada":"Frase",
+        "caracterObtener":"Ingrese letra a adivinar: ",
+        "ignorar":"Ingrese cualquier tecla para continuar"
+    },
+    "Juego":[
+        "Gano",
+        "Perdio"
+    ]
+}
