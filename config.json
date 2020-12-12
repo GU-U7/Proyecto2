@@ -1,50 +1,57 @@
 {
-    "funcMain":{
-        "menuPrincipal":[
-            "Jugar",
-            "Configuracion",
-            "Highscores",
+    "funcMain" : {
+        "menuPrincipal" : [
+            "Jugar", 
+            "Configuracion", 
+            "Highscores", 
             "Salir"
-        ],
-        "menuJugar":[
-            "Un jugador",
-            "Dos jugadores",
-            "Regresar",
+        ], 
+        "menuJugar" : [
+            "Un jugador", 
+            "Dos jugadores", 
+            "Regresar", 
             "Salir"
-        ],
-        "menuConfiguracion":[
-            "Configurar intentos",
-            "Regresar",
+        ], 
+        "menuConfiguracion" : [
+            "Configurar intentos", 
+            "Configurar dificultad", 
+            "Configurar probabilidad", 
+            "Regresar", 
             "Salir"
-        ],
-        "opcion":[
-            "Ingresar opcion: ",
+        ], 
+        "opcion" : [
+            "Ingresar opcion: ", 
             "Opcion incorrecta, intente de nuevo: "
-        ],
-        "miscelaneo":[
+        ], 
+        "miscelaneo" : [
             "En construccion", 
             "Regresar"
         ]
-    },
-    "funcJuego":{
-        "resultados":{
-            "estado":[
-                "Acerto la frase",
+    }, 
+    "funcJuego" : {
+        "resultados" : {
+            "estado" : [
+                "Acerto la frase", 
                 "Ha perdido"
-            ],
-            "puntaje":"Puntaje obtenido:",
-            "tiempo":"Tiempo tardado:",
-            "nombre":[
+            ], 
+            "puntaje" : "Puntaje obtenido:", 
+            "tiempo" : "Tiempo tardado:", 
+            "nombre" : [
                 "Introduce tu nombre: ", 
-                "Ingresa un nombre mas largo: "
+                "Ingresa un nombre entre 1 y 20 caracteres: "
             ]
-        },
-        "palabraSeleccionada":"Frase",
-        "caracterObtener":"Ingrese letra a adivinar: ",
-        "ignorar":"Ingrese cualquier tecla para continuar"
-    },
-    "Juego":[
-        "Gano",
+        }, 
+        "palabraSeleccionada" : "Frase", 
+        "caracterObtener" : "Ingrese letra a adivinar: ", 
+        "ignorar" : "Ingrese cualquier tecla para continuar"
+    }, 
+    "Juego" : [
+        "Gano", 
         "Perdio"
+    ], 
+    "dificultad" : [
+        "Dificil", 
+        0.28, 
+        10
     ]
 }

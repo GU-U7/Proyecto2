@@ -6,17 +6,27 @@ Miguel Apaza Pariona
 """
 
 import funciones
-import os
+from os import system
+import json
 
 def main():
 
-    os.system("clear")
+    system("clear")
 
-    controlAbandondo=[0,0,0]
-    intentos = [5]
+    controlAbandondo=[0,0,0] #controla la manipulación de opciones salir y regresar
 
-    funciones.fM.menuPrincipal(controlAbandondo, intentos)
+    archivoJSON=open("config.json",)
+    cargaJSON=json.load(archivoJSON) #se accede al json 
+    dificultad=cargaJSON["dificultad"] #consigue dificultad
+    archivoJSON.close()
 
-    os.system("clear")
+    funciones.fM.menuPrincipal(controlAbandondo, dificultad)
+
+    cargaJSON["dificultad"]=dificultad #actualizar dificultad
+    cargaJSON=json.dumps(cargaJSON, indent=4, separators=(", ", " : "))
+
+    nuevoJSON=open("config.json","w")
+    nuevoJSON.write(cargaJSON)
+    system("clear")
 
 main()

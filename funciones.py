@@ -1,12 +1,13 @@
 import jugabilidad
 from os import system
-from pandas import read_csv
-import random
+import pandas as pd
+import random 
 import time
 import json
 
-configJSON=open("config.json",)
-configJSON=json.load(configJSON)
+archivoJSON=open("config.json",)
+configJSON=json.load(archivoJSON)
+archivoJSON.close() 
 
 class funcionesMain:
 
@@ -19,17 +20,17 @@ class funcionesMain:
 
     def resultadosLeer(self):
         system("clear")
-        archivo = read_csv("resultados.csv")
+        archivo = pd.read_csv("resultados.csv")
         print(archivo)
         del archivo
 
     def opcionValidar(self, opciones):
-        opcion=input(self.configOpcion[0])
+        opcion=input(self.configOpcion[0]) 
         while not opcion in opciones:
             opcion=input(self.configOpcion[1])
         return opcion
 
-    def menuPrincipal(self,opciones, intentos):
+    def menuPrincipal(self,opciones, dificultad):
         system("clear")
         while opciones[2]==0:
             print("1.",self.configMenuPrincipal[0])
@@ -38,9 +39,9 @@ class funcionesMain:
             print("4.",self.configMenuPrincipal[3])
             opcionPrincipal=self.opcionValidar(["1","2","3","4"])
             if opcionPrincipal == "1":
-                self.menuJugar(opciones, intentos)
+                self.menuJugar(opciones, dificultad)
             elif opcionPrincipal == "2":
-                self.menuConfiguracion(opciones, intentos)
+                self.menuConfiguracion(opciones, dificultad)
             elif opcionPrincipal == "3":
                 self.resultadosLeer()
                 print("1.",self.configMiscelacneo[1])
@@ -50,7 +51,7 @@ class funcionesMain:
                 opciones[2]=1
         system("clear")
 
-    def menuJugar(self,opciones, intentos):
+    def menuJugar(self,opciones, dificultad):
         system("clear")
         while opciones[2]==0 and opciones[0]==0:
             print("1.",self.configMenuJugar[0])
@@ -59,7 +60,7 @@ class funcionesMain:
             print("4.",self.configMenuJugar[3])
             opcionJugar=self.opcionValidar(["1","2","3","4"])
             if opcionJugar=="1":
-                resultados=jugabilidad.juegoUnJugador(int(intentos[0]))
+                resultados=jugabilidad.juegoUnJugador(dificultad)
                 self.resultadosGrabar(resultados)
             elif opcionJugar=="2":
                 system("clear")
@@ -74,21 +75,39 @@ class funcionesMain:
         opciones[0]=0
         system("clear")
 
-    def menuConfiguracion(self,opciones, intentos):
+    def menuConfiguracion(self,opciones, dificultad):
         system("clear")
         while opciones[2]==0 and opciones[1]==0:
             print("1.",self.configMenuConfiguracion[0])
             print("2.",self.configMenuConfiguracion[1])
             print("3.",self.configMenuConfiguracion[2])
-            opcionConfig=self.opcionValidar(["1","2","3"])
+            print("4.",self.configMenuConfiguracion[3])
+            print("5.",self.configMenuConfiguracion[4])
+            opcionConfig=self.opcionValidar(["1","2","3","4","5"])
             if opcionConfig == "1":
                 system("clear")
                 print("Cantidad de intentos para el juego (solo puede ser 5, 10 o 15):")
-                intentos[0] = self.opcionValidar(["5", "10", "15"])
+                print("Intentos actuales:", dificultad[2])
+                dificultad[2] = int(self.opcionValidar(["5", "10", "15"]))
                 system("clear")
             elif opcionConfig == "2":
-                opciones[1] = 1
+                system("clear")
+                print("Ingresar dificultad ya sea Facil(F), Medio(M) o Dificil(D):")
+                print("Dificultad actual:", dificultad[0])
+                dificultad[0] = self.opcionValidar(["F", "M", "D"])
+                system("clear")
             elif opcionConfig == "3":
+                system("clear")
+                print("Ingresar probabilidad (enteros del 0 al 100):")
+                print("Dificultad actual:", dificultad[1])
+                dificultad[1] = int(input())
+                while not dificultad[1] in range(0,100):
+                    dificultad[1] = int(input())
+                dificultad[1]/=100
+                system("clear")
+            elif opcionConfig == "4":
+                opciones[1] = 1
+            elif opcionConfig == "5":
                 opciones[2] = 1
         opciones[1]=0
         system("clear")
@@ -120,16 +139,22 @@ class funcionesJuego:
         print(self.configResultados["puntaje"],puntaje)
         print(self.configResultados["tiempo"],round(tiempo[0],2),"s")
         nombre=input(self.configResultados["nombre"][0])
-        while len(nombre)<5:
+        while len(nombre)<1 or len(nombre)>20:
             nombre=input(self.configResultados["nombre"][1])
         return nombre
 
-    def palabraSeleccionada(self):
+    def palabraSeleccionada(self, dificultad, probabilidad):
         entradas=open("entradas.txt", "r")
         palabras=[i[:len(i)-1] for i in entradas]
-        print(palabras)
         entradas.close()
-        seleccion=palabras[random.randint(0,len(palabras)-1)]
+
+        if dificultad=="Facil":
+            seleccion=palabras[random.randint(3,5)] if random.randint(1,100)<=int(probabilidad*100) else palabras[random.randint(0,5)]
+        elif dificultad=="Medio":
+            seleccion=palabras[19] if random.randint(1,100) <= int(probabilidad*100) else palabras[random.randint(6,19)]
+        else:
+            seleccion=palabras[20]
+
         seleccionLista=[]
         for i in seleccion:
             if i==' ':
