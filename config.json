@@ -10,14 +10,20 @@
             "Un jugador", 
             "Dos jugadores", 
             "Regresar", 
-            "Salir"
+            "Salir", 
+            "Desea volver a jugar con mayor dificultad (Si o No)?:"
         ], 
         "menuConfiguracion" : [
             "Configurar intentos", 
             "Configurar dificultad", 
             "Configurar probabilidad", 
             "Regresar", 
-            "Salir"
+            "Salir", 
+            "Cantidad de intentos para el juego (solo multiplos de 5):", 
+            "Ingresar dificultad ya sea Facil, Medio o Dificil:", 
+            "Dificultad actual:", 
+            "Ingresar probabilidad (enteros del 0 al 100):", 
+            "Intentos actuales:"
         ], 
         "opcion" : [
             "Ingresar opcion: ", 
@@ -41,7 +47,7 @@
                 "Ingresa un nombre entre 1 y 20 caracteres: "
             ]
         }, 
-        "palabraSeleccionada" : "Frase", 
+        "palabraImprimir" : "Frase", 
         "caracterObtener" : "Ingrese letra a adivinar: ", 
         "ignorar" : "Ingrese cualquier tecla para continuar"
     }, 
@@ -52,6 +58,21 @@
     "dificultad" : [
         "Medio", 
         0.28, 
-        10
-    ]
+        30
+    ], 
+    "configuraciones" : {
+        "dificultades" : [
+            "Facil", 
+            "Medio", 
+            "Dificil"
+        ], 
+        "columnas" : [
+            "Nombre", 
+            "Puntaje", 
+            "Tiempo", 
+            "Estado final", 
+            "Intentos", 
+            "Errores totales"
+        ]
+    }
 }

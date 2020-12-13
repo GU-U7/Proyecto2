@@ -9,7 +9,7 @@ def juegoUnJugador(dificultad):
 
     while not errores==dificultad[2]:
         os.system("clear")
-        funciones.fJ.dibujoN(dificultad[2], errores)
+        funciones.fJ.dibujar(dificultad[2], errores)
         funciones.fJ.palabraImprimir(palabraMuestra)
 
         if funciones.fJ.palabraCompleta(palabraMuestra, palabra):
@@ -28,7 +28,7 @@ def juegoUnJugador(dificultad):
             errores+=1
     else:
         os.system("clear")
-        funciones.fJ.dibujoN(dificultad[2], errores)
+        funciones.fJ.dibujar(dificultad[2], errores)
         funciones.fJ.palabraImprimir(palabraMuestra)
         nombre=funciones.fJ.resultados(puntaje, tiempo, 'P')
         funciones.fJ.ignorar()

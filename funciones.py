@@ -17,11 +17,13 @@ class funcionesMain:
         self.configMenuConfiguracion=archivoJSON["funcMain"]["menuConfiguracion"]
         self.configOpcion=archivoJSON["funcMain"]["opcion"]
         self.configMiscelacneo=archivoJSON["funcMain"]["miscelaneo"]
+        self.columnas=archivoJSON["configuraciones"]["columnas"]
+        self.dificultades=archivoJSON["configuraciones"]["dificultades"]
 
     def resultadosLeer(self):
         system("clear")
-        columnas=["Nombre","Puntaje","Tiempo","Estado final","Intentos","Errores totales"]
-        archivo = pd.read_csv("resultados.csv",names=columnas, header=None)
+        columnas_resultados=self.columnas
+        archivo = pd.read_csv("resultados.csv",names=columnas_resultados, header=None)
         print(archivo)
         del archivo
 
@@ -66,13 +68,13 @@ class funcionesMain:
                     resultados=jugabilidad.juegoUnJugador(dificultad)
                     self.resultadosGrabar(resultados)
                     if resultados["Estado final"]=="Gano":
-                        print("Desea volver a jugar con mayor dificultad (Si o No)?:")
+                        print(self.configMenuJugar[4])
                         otraVez=self.opcionValidar(["Si","No"])
-                        if otraVez=="Si" and not dificultad[0]=="Dificil":
-                            if dificultad[0]=="Facil":
-                                dificultad[0]="Medio"
+                        if otraVez=="Si" and not dificultad[0]==self.dificultades[2]:
+                            if dificultad[0]==self.dificultades[0]:
+                                dificultad[0]=self.dificultades[1]
                             else:
-                                dificultad[0]="Dificil"
+                                dificultad[0]=self.dificultades[2]
                     else:
                         otraVez="No"
                 system("clear")
@@ -100,20 +102,20 @@ class funcionesMain:
             opcionConfig=self.opcionValidar(["1","2","3","4","5"])
             if opcionConfig == "1":
                 system("clear")
-                print("Cantidad de intentos para el juego (solo puede ser 5, 10 o 15):")
-                print("Intentos actuales:", dificultad[2])
-                dificultad[2] = int(self.opcionValidar(["5", "10", "15"]))
+                print(self.configMenuConfiguracion[5])
+                print(self.configMenuConfiguracion[9], dificultad[2])
+                dificultad[2] = int(self.opcionValidar([str(5*a) for a in range(1,19)]))
                 system("clear")
             elif opcionConfig == "2":
                 system("clear")
-                print("Ingresar dificultad ya sea Facil, Medio o Dificil:")
-                print("Dificultad actual:", dificultad[0])
-                dificultad[0] = self.opcionValidar(["Facil", "Medio", "Dificil"])
+                print(self.configMenuConfiguracion[6])
+                print(self.configMenuConfiguracion[7], dificultad[0])
+                dificultad[0] = self.opcionValidar([self.dificultades[0], self.dificultades[1], self.dificultades[2]])
                 system("clear")
             elif opcionConfig == "3":
                 system("clear")
-                print("Ingresar probabilidad (enteros del 0 al 100):")
-                print("Dificultad actual:", dificultad[1])
+                print(self.configMenuConfiguracion[8])
+                print(self.configMenuConfiguracion[7], dificultad[1])
                 dificultad[1] = int(input())
                 while not dificultad[1] in range(0,100):
                     dificultad[1] = int(input())
@@ -127,17 +129,10 @@ class funcionesMain:
         system("clear")
 
     def resultadosGrabar(self, resultados):
-        """ #Antiguo codigo de guardado
-        archivo = open("resultados.csv", "a")
-        for i in range(len(resultados)-1):
-            archivo.write(str(resultados[i])+",")
-        archivo.write(str(resultados[len(resultados)-1])+"\n")
-        archivo.close()
-        """
-        
+
         #Se actualizan y graban los resultados 
-        columnas=["Nombre","Puntaje","Tiempo","Estado final","Intentos","Errores totales"]
-        df=pd.read_csv("resultados.csv",names=columnas, header=None)
+        columnas_resultados=self.columnas
+        df=pd.read_csv("resultados.csv",names=columnas_resultados, header=None)
         df=df.append(resultados,ignore_index=True)
 
 
@@ -152,10 +147,10 @@ class funcionesMain:
                 quicksort(A,q+1,r)
 
         def particion(A,p,r):
-            x=A[r]['Puntaje']
+            x=A[r][columnas_resultados[1]]
             i=p-1
             for j in range(p, r):
-                if A[j]['Puntaje']>=x:
+                if A[j][columnas_resultados[1]]>=x:
                     i+=1
                     A[i],A[j]=A[j],A[i]
             A[i+1],A[r]=A[r],A[i+1]
@@ -173,9 +168,10 @@ class funcionesJuego:
 
     def __init__(self, archivoJSON):
         self.configResultados=archivoJSON["funcJuego"]["resultados"]
-        self.configPalabraSeleccionada=archivoJSON["funcJuego"]["palabraSeleccionada"]
+        self.configPalabraImprimir=archivoJSON["funcJuego"]["palabraImprimir"]
         self.configCaracterObtener=archivoJSON["funcJuego"]["caracterObtener"]
         self.configIgnorar=archivoJSON["funcJuego"]["ignorar"]
+        self.dificultades=archivoJSON["configuraciones"]["dificultades"]
 
     def resultados(self,puntaje, tiempo, estado):
         if estado=='G':
@@ -194,9 +190,9 @@ class funcionesJuego:
         palabras=[i[:len(i)-1] for i in entradas]
         entradas.close()
 
-        if dificultad=="Facil":
+        if dificultad==self.dificultades[0]:
             seleccion=palabras[random.randint(3,5)] if random.randint(1,100)<=int(probabilidad*100) else palabras[random.randint(0,5)]
-        elif dificultad=="Medio":
+        elif dificultad==self.dificultades[1]:
             seleccion=palabras[19] if random.randint(1,100) <= int(probabilidad*100) else palabras[random.randint(6,19)]
         else:
             seleccion=palabras[20]
@@ -210,7 +206,7 @@ class funcionesJuego:
         return seleccion, seleccionLista
 
     def palabraImprimir(self,lista):
-        print(self.configPalabraSeleccionada)
+        print(self.configPalabraImprimir)
         for i in lista:
             print(i,end=' ')
         print()
@@ -241,64 +237,85 @@ class funcionesJuego:
             if caracter==original[i] or caracter.upper()==original[i]:
                 lista[i]=original[i]
 
-    def dibujo5(self,errores):
-        C1=["   ",' | ','/| ', '/|\\']
-        C2=["   ","/  ","/ \\"]
-        print("========")
-        print("  +---+")
-        print("  |   |")
-        print("  O   |")
-        print(" "+C1[3 if errores>=3 else errores]+"  |")
-        print(" "+C2[0 if errores<4 else errores%3]+"  |")
-        print("      |")
-        print("========")
-
-    def dibujo10(self,errores):
-        C1=['   ',' | ','/| ', '/|\\']
-        C2=['     ','  |  ','/ |  ','/ | \\']
-        C3=['   ','/  ','/ \\']
-        C4=['     ','/    ','/   \\']
-        print("============")
-        print("    +------+")
-        print("    |      |")
-        print("    O      |")
-        print("   "+C1[3 if errores>=3 else errores]+"     |")
-        print("  "+C2[0 if errores<4 else (3 if errores>6 else errores-3)]+"    |")
-        print("   "+C3[0 if errores<7 else (2 if errores>8 else errores%6)]+"     |")
-        print("  "+C4[0 if errores<9 else errores%8]+"    |")
-        print("           |")
-        print("           |")
-        print("============")
-
-    def dibujo15(self,errores):
-        C1=["   "," | ","/| ","/|\\"]
-        C2=["     ","  |  ","/ |  ","/ | \\"]
-        C3=["       ","   |   ","/  |   ","/  |  \\"]
-        C4=["   ","/  ","/ \\"]
-        C5=["     ","/    ","/   \\"]
-        C6=["       ","/      ","/     \\"]
-        print("====================")
-        print("      +-----------+")
-        print("      |           |")
-        print("      O           |")
-        print("     "+C1[3 if errores>3 else errores]+"          |")
-        print("    "+C2[0 if errores<4 else (3 if errores>6 else errores-3)]+"         |")
-        print("   "+C3[0 if errores<7 else (3 if errores>9 else errores-6)]+"        |")
-        print("     "+C4[0 if errores<10 else (2 if errores>11 else errores-9)]+"          |")
-        print("    "+C5[0 if errores<12 else (2 if errores>13 else errores-11)]+"         |") 
-        print("   "+C6[0 if errores<14 else errores-13]+"        |")
-        print("                  |")
-        print("                  |")
-        print("                  |")
-        print("====================")
-
-    def dibujoN(self,intentos, errores):
-        if intentos==5:
-            self.dibujo5(errores)
-        elif intentos==10:
-            self.dibujo10(errores)
-        else:
-            self.dibujo15(errores)
+    def dibujar(self,intentos, errores):
+        #MARCO SUPERIOR
+        for i in range(intentos+3):
+            print("=",end="")
+        print()
+        #PALO SUPERIOR
+        for i in range(intentos+2):
+            if i <(intentos//5)*2:
+                print(" ", end="")
+            elif i==(intentos//5)*2 or i==intentos+1:
+                print("+",end="")
+            else:
+                print("-",end="")
+        print()
+        #PALOS LATERALES
+        for i in range(intentos+2):
+            if i==(intentos//5)*2 or i==intentos+1:
+                print("|",end="")
+            else:
+                print(" ",end="")
+        print()
+        #CABEZA
+        for i in range(intentos+2):
+            if i==(intentos//5)*2:
+                print("O",end="")
+            elif  i==intentos+1:
+                print("|",end="")
+            else:
+                print(" ",end="")
+        print()
+        #CUERPO
+        flag1=intentos//5+(intentos//5-1)
+        flag2=intentos//5+(intentos//5+1)
+        conteo=0
+        for i in range(((intentos)//5)*2):
+            for j in range(intentos+2):
+                if j==intentos+1:
+                    print("|",end="")
+                elif j in range(intentos//5,(intentos//5)*3+1):
+                    if j==flag1:
+                        if conteo<errores:
+                            print('/',end='')
+                            conteo+=1
+                        else:
+                            print(' ',end='')
+                        flag1-=1
+                    elif j==flag2:
+                        if conteo<errores:
+                            print('\\',end='')
+                            conteo+=1
+                        else:
+                            print(' ',end='')
+                    elif j ==2*intentos//5 and i<(intentos)//5:
+                        if conteo<errores:
+                            print("|",end="")
+                            conteo+=1
+                        else:
+                            print(' ',end='')
+                    else:
+                        print(" ",end="") #Espacios de casilla de la persona
+                else:
+                    print(" ",end="")
+            
+            flag2+=1
+            if flag1<intentos//5:
+                flag1=intentos//5+(intentos//5-1)
+                flag2=intentos//5+(intentos//5+1)
+            print()
+        #PALO
+        for i in range(intentos+2):
+            if i==intentos+1:
+                print("|",end="")
+            else:
+                print(" ",end="")
+        print()
+        #MARCO INFERIOR
+        for i in range(intentos+3):
+            print("=",end="")
+        print()
 
     def ignorar(self):
         a=input(self.configIgnorar)
