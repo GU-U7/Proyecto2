@@ -15,8 +15,8 @@ def juegoUnJugador(dificultad):
         if funciones.fJ.palabraCompleta(palabraMuestra, palabra):
             nombre=funciones.fJ.resultados(puntaje, tiempo, 'G')
             funciones.fJ.ignorar()
-            os.system("clear")
-            return [nombre[:5], puntaje, round(tiempo[0],2), "Gano",  dificultad[2],  errores]
+            #os.system("clear")
+            return {"Nombre":nombre[:5], "Puntaje":puntaje, "Tiempo":round(tiempo[0],2), "Estado final":"Gano",  "Intentos":dificultad[2],  "Errores totales":errores}
       
         letra=funciones.fJ.caracterObtener(tiempo)
         
@@ -33,4 +33,4 @@ def juegoUnJugador(dificultad):
         nombre=funciones.fJ.resultados(puntaje, tiempo, 'P')
         funciones.fJ.ignorar()
         os.system("clear")
-        return [nombre[:5], puntaje, round(tiempo[0],2), "Perdio",  dificultad[2],  dificultad[2]]
+        return {"Nombre":nombre[:5], "Puntaje":puntaje, "Tiempo":round(tiempo[0],2), "Estado final":"Perdio",  "Intentos":dificultad[2],  "Errores totales":dificultad[2]}

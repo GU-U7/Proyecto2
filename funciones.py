@@ -20,7 +20,8 @@ class funcionesMain:
 
     def resultadosLeer(self):
         system("clear")
-        archivo = pd.read_csv("resultados.csv")
+        columnas=["Nombre","Puntaje","Tiempo","Estado final","Intentos","Errores totales"]
+        archivo = pd.read_csv("resultados.csv",names=columnas, header=None)
         print(archivo)
         del archivo
 
@@ -60,8 +61,21 @@ class funcionesMain:
             print("4.",self.configMenuJugar[3])
             opcionJugar=self.opcionValidar(["1","2","3","4"])
             if opcionJugar=="1":
-                resultados=jugabilidad.juegoUnJugador(dificultad)
-                self.resultadosGrabar(resultados)
+                otraVez="Si"
+                while otraVez=="Si":
+                    resultados=jugabilidad.juegoUnJugador(dificultad)
+                    self.resultadosGrabar(resultados)
+                    if resultados["Estado final"]=="Gano":
+                        print("Desea volver a jugar con mayor dificultad (Si o No)?:")
+                        otraVez=self.opcionValidar(["Si","No"])
+                        if otraVez=="Si" and not dificultad[0]=="Dificil":
+                            if dificultad[0]=="Facil":
+                                dificultad[0]="Medio"
+                            else:
+                                dificultad[0]="Dificil"
+                    else:
+                        otraVez="No"
+                system("clear")
             elif opcionJugar=="2":
                 system("clear")
                 print(self.configMiscelacneo[0])
@@ -92,9 +106,9 @@ class funcionesMain:
                 system("clear")
             elif opcionConfig == "2":
                 system("clear")
-                print("Ingresar dificultad ya sea Facil(F), Medio(M) o Dificil(D):")
+                print("Ingresar dificultad ya sea Facil, Medio o Dificil:")
                 print("Dificultad actual:", dificultad[0])
-                dificultad[0] = self.opcionValidar(["F", "M", "D"])
+                dificultad[0] = self.opcionValidar(["Facil", "Medio", "Dificil"])
                 system("clear")
             elif opcionConfig == "3":
                 system("clear")
@@ -113,11 +127,43 @@ class funcionesMain:
         system("clear")
 
     def resultadosGrabar(self, resultados):
+        """ #Antiguo codigo de guardado
         archivo = open("resultados.csv", "a")
         for i in range(len(resultados)-1):
-            archivo.write(str(resultados[i])+", ")
+            archivo.write(str(resultados[i])+",")
         archivo.write(str(resultados[len(resultados)-1])+"\n")
         archivo.close()
+        """
+        
+        #Se actualizan y graban los resultados 
+        columnas=["Nombre","Puntaje","Tiempo","Estado final","Intentos","Errores totales"]
+        df=pd.read_csv("resultados.csv",names=columnas, header=None)
+        df=df.append(resultados,ignore_index=True)
+
+
+        entradas=[]
+        for i in range(0,df.shape[0]):
+            entradas.append(dict(df.loc[i]) )
+
+        def quicksort(A,p,r):
+            if p<r:
+                q=particion(A,p,r)
+                quicksort(A,p,q-1)
+                quicksort(A,q+1,r)
+
+        def particion(A,p,r):
+            x=A[r]['Puntaje']
+            i=p-1
+            for j in range(p, r):
+                if A[j]['Puntaje']>=x:
+                    i+=1
+                    A[i],A[j]=A[j],A[i]
+            A[i+1],A[r]=A[r],A[i+1]
+            return i+1
+
+        quicksort(entradas, 0, len(entradas)-1)
+
+        pd.DataFrame(entradas).loc[:9].to_csv("resultados.csv", index=False, header=False)        
 
     
 
