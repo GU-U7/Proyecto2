@@ -4,6 +4,7 @@ import pandas as pd
 import random 
 import time
 import json
+import webbrowser
 
 archivoJSON=open("config.json",)
 configJSON=json.load(archivoJSON)
@@ -11,7 +12,7 @@ archivoJSON.close()
 
 class funcionesMain:
 
-    def __init__(self, archivoJSON):
+    def __init__(self, archivoJSON): #Definimos variables locales para facilitar el acceso a los valores JSON
         self.configMenuPrincipal=archivoJSON["funcMain"]["menuPrincipal"]
         self.configMenuJugar=archivoJSON["funcMain"]["menuJugar"]
         self.configMenuConfiguracion=archivoJSON["funcMain"]["menuConfiguracion"]
@@ -166,7 +167,7 @@ class funcionesJuego:
 
     alfabeto=[chr(a) for a in range(97, 123)] + [chr(b) for b in range(65,91)]+[str(n) for n in range(0,10)]
 
-    def __init__(self, archivoJSON):
+    def __init__(self, archivoJSON): #Definimos variables locales para facilitar el acceso a los valores JSON
         self.configResultados=archivoJSON["funcJuego"]["resultados"]
         self.configPalabraImprimir=archivoJSON["funcJuego"]["palabraImprimir"]
         self.configCaracterObtener=archivoJSON["funcJuego"]["caracterObtener"]
@@ -220,6 +221,8 @@ class funcionesJuego:
     def caracterObtener(self,tiempo):
         tiempoInicial=time.time()
         caracter=input(self.configCaracterObtener)
+        if caracter=="Proyecto2":
+            webbrowser.open("http://www1.herrera.unt.edu.ar/biblcet/wp-content/uploads/2014/12/ippython.pdf")
         while len(caracter)!=1 or not caracter in self.alfabeto:
             caracter=input(self.configCaracterObtener)
         tiempoFinal=time.time()

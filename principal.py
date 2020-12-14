@@ -2,7 +2,7 @@
 Grupo P2 3
 Grover Eduardo Ugarte Quispe 202020159
 Daniel Arturo Ventura Atarama 202010429
-Miguel Apaza Pariona
+Miguel Angel Apaza Pariona 202020006
 """
 
 import funciones
@@ -14,7 +14,7 @@ def main():
     system("clear")
 
     controlAbandondo=[0,0,0] #controla la manipulación de opciones salir y regresar
-
+    
     archivoJSON=open("config.json",)
     cargaJSON=json.load(archivoJSON) #se accede al json 
     dificultad=cargaJSON["dificultad"] #consigue dificultad
